@@ -1,0 +1,39 @@
+name: Scrape and Update English Sri Lanka Acts
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 2 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install scraper dependencies
+        run: python -m pip install --upgrade pip requests
+
+      - name: Scrape official website and update dataset
+        run: python scripts/sync_english_acts.py
+
+      - name: Commit and push when changed
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore: update English acts dataset"
+            git push
+          else
+            echo "No changes to commit."
+          fi
