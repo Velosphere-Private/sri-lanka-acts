@@ -2,8 +2,7 @@
 """
 Direct scraper/updater for Sri Lanka Acts (English only).
 
-This script is independent of lk_legal_docs. It scrapes the government acts
-listing pages, discovers English PDF links, and upserts `doc.json` metadata.
+It scrapes the government acts listing pages, discovers English PDF links, and upserts `doc.json` metadata.
 """
 
 from __future__ import annotations
